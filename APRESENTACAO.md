@@ -78,6 +78,10 @@ flowchart LR
 - Respostas fundamentadas em documentos corporativos
 - Indicacao das fontes consultadas
 - Integracao entre frontend e API Python
+- Abertura de chamados com dados do usuario
+- Ranking ficticio dos principais problemas
+- Solucoes organizadas por categoria
+- Encaminhamento de problemas diretamente ao chatbot
 
 ## Tecnologias
 

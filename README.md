@@ -8,6 +8,17 @@ Veja a interface, o GIF animado e os principais fluxos para avaliadores em [APRE
 
 Para publicar o projeto nas redes profissionais, consulte [LINKEDIN.md](./LINKEDIN.md). O arquivo inclui tres GIFs separados da interface inicial, da pergunta e da resposta fundamentada.
 
+## Atualizacao completa do suporte
+
+O projeto agora inclui:
+
+- **Abrir chamado:** formulario com nome, problema e descricao, gerando um numero de ticket.
+- **Mais Buscados:** ranking ficticio de problemas frequentes com quantidade de buscas e solucao rapida.
+- **Topicos:** categorias de Redes, Hardware e Perifericos com solucoes rapidas.
+- **Falar no chat:** acesso direto ao chatbot com a pergunta da solucao selecionada.
+
+Detalhes em [ATUALIZACOES.md](./ATUALIZACOES.md).
+
 Assistente RAG para suporte de TI, com base de conhecimento em ChromaDB e LLM via OpenRouter.
 
 ## Estrutura do projeto
