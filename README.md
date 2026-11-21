@@ -4,6 +4,10 @@
 
 Veja a interface, o GIF animado e os principais fluxos para avaliadores em [APRESENTACAO.md](./APRESENTACAO.md).
 
+## GIFs para LinkedIn
+
+Para publicar o projeto nas redes profissionais, consulte [LINKEDIN.md](./LINKEDIN.md). O arquivo inclui tres GIFs separados da interface inicial, da pergunta e da resposta fundamentada.
+
 Assistente RAG para suporte de TI, com base de conhecimento em ChromaDB e LLM via OpenRouter.
 
 ## Estrutura do projeto
