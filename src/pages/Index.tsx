@@ -1,8 +1,14 @@
-import { useState } from "react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Bot, Send, Loader2, FileText } from "lucide-react";
+import { FormEvent, useState } from "react";
+import {
+  Bot,
+  LayoutGrid,
+  MessageSquare,
+  Send,
+  TicketCheck,
+  TrendingUp,
+  Loader2,
+  FileText,
+} from "lucide-react";
 import { toast } from "sonner";
 
 interface Message {
@@ -20,12 +26,13 @@ export default function Index() {
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleSend = async () => {
-    if (!input.trim()) return;
+  const handleSend = async (question?: string) => {
+    const pergunta = (question ?? input).trim();
+    if (!pergunta) return;
 
     const userMessage: Message = {
       id: Date.now().toString(),
-      text: input,
+      text: pergunta,
       sender: "user",
       timestamp: new Date(),
     };
@@ -38,7 +45,7 @@ export default function Index() {
       const resposta = await fetch(API_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ pergunta: input }),
+        body: JSON.stringify({ pergunta }),
       });
 
       if (!resposta.ok) {
@@ -70,86 +77,118 @@ export default function Index() {
     }
   };
 
+  const handleSubmit = (event: FormEvent) => {
+    event.preventDefault();
+    void handleSend();
+  };
+
+  const perguntasRapidas = [
+    "Computador nao liga",
+    "Internet lenta",
+    "VPN nao conecta",
+    "Impressora offline",
+    "Esqueci minha senha",
+  ];
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 p-4 md:p-8">
-      <div className="max-w-4xl mx-auto">
-        <Card className="mb-6">
-          <CardHeader>
-            <div className="flex items-center gap-2">
-              <Bot className="h-6 w-6 text-blue-600" />
-              <CardTitle className="text-2xl">Bit - Assistente de Suporte de TI</CardTitle>
+    <div className="app-shell">
+      <aside className="sidebar">
+        <div className="brand">
+          <div className="brand-icon"><Bot /></div>
+          <div>
+            <strong>Bit</strong>
+            <span>Assistente de TI</span>
+          </div>
+        </div>
+
+        <nav className="side-nav" aria-label="Menu principal">
+          <button className="nav-item active" type="button">
+            <MessageSquare />
+            <span>Chat</span>
+          </button>
+          <button className="nav-item" type="button">
+            <LayoutGrid />
+            <span>Topicos</span>
+          </button>
+          <button className="nav-item" type="button">
+            <TrendingUp />
+            <span>Mais Buscados</span>
+          </button>
+        </nav>
+
+        <button className="ticket-button" type="button">
+          <TicketCheck />
+          <span>Abrir Chamado</span>
+        </button>
+      </aside>
+
+      <main className="chat-shell">
+        <header className="chat-header">
+          <div className="chat-brand">
+            <div className="brand-icon small"><Bot /></div>
+            <div>
+              <strong>Bit</strong>
+              <span>Assistente de Suporte de TI</span>
             </div>
-            <CardDescription>
-              Olá! Sou o assistente de suporte de TI. Digite sua pergunta abaixo e eu ajudarei você.
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4 max-h-[50vh] overflow-y-auto pr-2">
+          </div>
+          <p>Olá! Sou o Bit. Digite sua pergunta abaixo e eu ajudarei você.</p>
+
+          {messages.length === 0 && (
+            <div className="quick-questions">
+              <span className="quick-label">✨ Perguntas rápidas</span>
+              <div className="quick-buttons">
+                {perguntasRapidas.map((pergunta) => (
+                  <button key={pergunta} type="button" onClick={() => void handleSend(pergunta)}>
+                    {pergunta}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+        </header>
+
+        <section className="conversation" aria-live="polite">
+          {messages.length === 0 ? (
+            <div className="empty-state">
+              <Bot />
+              <p>Faça sua primeira pergunta sobre suporte de TI</p>
+            </div>
+          ) : (
+            <div className="message-list">
               {messages.map((msg) => (
-                <div
-                  key={msg.id}
-                  className={`flex ${msg.sender === "user" ? "justify-end" : "justify-start"}`}
-                >
-                  <div
-                    className={`max-w-xs lg:max-w-md px-4 py-2 rounded-lg ${msg.sender === "user" ? "bg-blue-100 text-blue-900" : "bg-gray-100 text-gray-900"}`}
-                  >
-                    <p className="whitespace-pre-wrap">{msg.text}</p>
+                <div key={msg.id} className={`message-row ${msg.sender}`}>
+                  <div className="message">
+                    <p>{msg.text}</p>
                     {msg.fontes && msg.fontes.length > 0 && (
-                      <div className="mt-2 pt-2 border-t border-gray-300">
-                        <p className="text-xs font-semibold text-gray-600 flex items-center gap-1">
-                          <FileText className="h-3 w-3" /> Fontes:
-                        </p>
-                        <p className="text-xs text-gray-500">{msg.fontes.join(", ")}</p>
+                      <div className="sources">
+                        <span><FileText /> Fontes:</span>
+                        <small>{msg.fontes.join(", ")}</small>
                       </div>
                     )}
-                    <p className="text-xs text-gray-500 mt-1">
-                      {msg.timestamp.toLocaleTimeString()}
-                    </p>
                   </div>
                 </div>
               ))}
               {isLoading && (
-                <div className="flex justify-start">
-                  <div className="bg-gray-100 px-4 py-2 rounded-lg">
-                    <Loader2 className="h-4 w-4 animate-spin" />
-                  </div>
+                <div className="message-row bot">
+                  <div className="message loading"><Loader2 /></div>
                 </div>
               )}
             </div>
-          </CardContent>
-        </Card>
+          )}
+        </section>
 
-        <Card>
-          <CardContent className="pt-6">
-            <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                handleSend();
-              }}
-              className="flex gap-2"
-            >
-              <Input
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                placeholder="Digite sua pergunta..."
-                disabled={isLoading}
-                className="flex-1"
-              />
-              <Button
-                type="submit"
-                disabled={isLoading || !input.trim()}
-                className="bg-blue-600 hover:bg-blue-700"
-              >
-                {isLoading ? (
-                  <Loader2 className="h-4 w-4 animate-spin" />
-                ) : (
-                  <Send className="h-4 w-4" />
-                )}
-              </Button>
-            </form>
-          </CardContent>
-        </Card>
-      </div>
+        <form className="composer" onSubmit={handleSubmit}>
+          <input
+            value={input}
+            onChange={(event) => setInput(event.target.value)}
+            placeholder="Digite sua pergunta sobre TI..."
+            disabled={isLoading}
+          />
+          <button type="submit" disabled={isLoading || !input.trim()} aria-label="Enviar pergunta">
+            {isLoading ? <Loader2 className="spin" /> : <><Send /><span>Enviar</span></>}
+          </button>
+        </form>
+      </main>
     </div>
   );
 }

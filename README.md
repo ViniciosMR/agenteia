@@ -1,5 +1,9 @@
 # Bit - Assistente de Suporte de TI
 
+## Apresentacao visual
+
+Veja a interface, o GIF animado e os principais fluxos para avaliadores em [APRESENTACAO.md](./APRESENTACAO.md).
+
 Assistente RAG para suporte de TI, com base de conhecimento em ChromaDB e LLM via OpenRouter.
 
 ## Estrutura do projeto

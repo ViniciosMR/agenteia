@@ -48,6 +48,16 @@ O cabecalho apresenta o nome do assistente e inclui perguntas frequentes para in
 
 O usuario pode digitar a duvida no campo inferior e enviar a pergunta com o botao de envio.
 
+### Pergunta digitada
+
+![Interface com uma pergunta digitada](./assets/interface/bit-interface-digita.png)
+
+### Resposta fundamentada
+
+![Interface exibindo a resposta do assistente](./assets/interface/bit-interface-resposta.png)
+
+Cada resposta pode indicar os documentos utilizados pela busca semantica, permitindo que o usuario identifique as fontes consultadas.
+
 ## Fluxo de uso
 
 ```mermaid
